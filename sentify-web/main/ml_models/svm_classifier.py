@@ -2,11 +2,13 @@ import pickle
 import pandas as pd
 from .preprocessing import data_preprocessor, process_review
 import time
+import os
 
+print(f"\n\n CWD: {os.getcwd()}\n\n")
 
 # Constants
-SVM_MODEL_PATH = "ml_model/svm_model.pkl"
-TFIDF_MODEL_PATH = "ml_model/tfidf_model.pkl"
+SVM_MODEL_PATH = "ml_models/svm_model.pkl"
+TFIDF_MODEL_PATH = "ml_models/tfidf_model.pkl"
 
 
 def load_model(file_path):
@@ -45,4 +47,4 @@ def analyze_review_single(review):
     tfidf_matrix = tfidf_vectorizer.transform([clean_review])
     prediction = svm_model.predict(tfidf_matrix)
 
-    return clean_review, prediction[0]
+    return prediction[0]

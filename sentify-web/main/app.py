@@ -8,12 +8,15 @@ from flask import (
     session,
     g,
 )
+from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 from flask_cors import CORS
+
 import os
-from werkzeug.utils import secure_filename
+import pandas as pd
+from main.ml_models.svm_classifier import analyze_review, analyze_review_single
 
 load_dotenv()
 
@@ -62,6 +65,7 @@ def load_user():
         g.user = User.query.get(session["user_id"])
     else:
         g.user = None
+
 
 # controllers
 @app.route("/")
@@ -129,3 +133,78 @@ def logout():
     # Clear the session
     session.clear()
     return redirect(url_for("login"))
+
+
+# classifier
+@app.route("/predict-csv", methods=["POST"])
+def predict():
+    if request.method == "POST":
+        # Check if the post request has the file part
+        if "file" not in request.files:
+            flash("No file part")
+            return redirect(request.url)
+
+        file = request.files["file"]
+
+        # If the user does not select a file, the browser submits an empty file without a filename
+        if file.filename == "":
+            flash("No selected file")
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            file.save(file_path)
+
+            # Read CSV file into a DataFrame
+            data = pd.read_csv(file_path)
+
+            # clasify the file
+            result = analyze_review(data["review"])
+
+            labels_result = result["label"].value_counts().index.tolist()
+            counts_result = result["label"].value_counts().tolist()
+
+            print("\nlabels: ")
+            print(labels_result)
+            print("\ncounts: ")
+            print(counts_result)
+
+            samples = (
+                result.groupby("label")
+                .apply(lambda x: x.sample(5))
+                .reset_index(drop=True)
+            )
+
+            samples_positive = samples[samples["label"] == "positive"]
+            samples_negative = samples[samples["label"] == "negative"]
+
+            # Reset ulang indeks agar dimulai dari 0
+            samples_positive.reset_index(drop=True, inplace=True)
+            samples_negative.reset_index(drop=True, inplace=True)
+
+            print("\nsample positife: \n", samples_positive)
+            print("\nsample negative: \n", samples_negative)
+
+            return render_template(
+                "predict/result_csv.html",
+                samples_positive=samples_positive,
+                samples_negative=samples_negative,
+                labels_result=labels_result,
+                counts_result=counts_result,
+            )
+
+    return render_template("dashboard/multi.html")
+
+
+@app.route("/predict-single", methods=["POST"])
+def predict_single():
+    if request.method == "POST":
+        review = request.form.get("review")
+
+        # process
+        label = analyze_review_single(review)
+
+        return render_template("predict/result_single.html", review=review, label=label)
+
+    return render_template("dashboard/single.html")

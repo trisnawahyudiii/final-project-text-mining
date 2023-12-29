@@ -1,171 +1,101 @@
 {% extends "layouts/index.html" %} {% block content %}
 <section class="flex flex-col justify-center items-center text-center gap-3">
-    <div class="flex flex-wrap items-center justify-center w-full gap-3">
+    <div class="flex w-full gap-3">
         <div
-            class="flex-1 flex flex-col rounded-2xl border border-1-[#f9f9f9] p-10 bg-[#09090a] text-[#f9f9f9] min-h-[520px]"
+            class="flex flex-col rounded-2xl border border-1-[#f9f9f9] p-10 bg-[#09090a] text-[#f9f9f9] min-h-[520px] min-w-[30%]"
         >
-            <h1 class="capitalize text-2xl font-semibold">Clustering Result</h1>
-            <canvas id="pieChartCluster"></canvas>
+            <h1 class="capitalize text-2xl font-semibold mb-3">Clasification Result</h1>
+            <canvas id="chart"></canvas>
         </div>
         <div
-            class="flex flex-col rounded-2xl border border-1-[#f9f9f9] p-10 bg-[#09090a] text-[#f9f9f9] h-full min-h-[520px]"
+            class="flex flex-col rounded-2xl border border-1-[#f9f9f9] p-10 bg-[#09090a] text-[#f9f9f9] w-full items-center justify-center gap-10"
         >
-            <h1 class="capitalize text-2xl font-semibold">Prediction Result</h1>
-            <div class="flex space-x-4 text-[#f9f9f9] h-full items-center justify-center">
-                <div class="flex-1">
-                    <canvas id="pieChartKebersihan"></canvas>
-                </div>
-                <div class="flex-1">
-                    <canvas id="pieChartService"></canvas>
-                </div>
-                <div class="flex-1">
-                    <canvas id="pieChartLinen"></canvas>
-                </div>
+            <div class="flex w-full gap-3 flex-col">
+                <h1 class="capitalize text-2xl font-semibold mb-3">Samples Positive</h1>
+                <table class="rounded-md border">
+                    <thead class="rounded-t">
+                        <tr class="rounded-t-lg">
+                            <th class="border border-1-[#f9f9f9] text-center">No</th>
+                            <th class="border border-1-[#f9f9f9]">Review</th>
+                            <th class="border border-1-[#f9f9f9]">Label</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for index, sample in samples_positive.iterrows() %}
+                        <tr>
+                            <td class="text-center border border-1-[#f9f9f9]">{{ index+1 }}</td>
+                            <td class="border border-1-[#f9f9f9]">{{ sample['review'] }}</td>
+                            <td class="border border-1-[#f9f9f9]">{{ sample['label'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex w-full gap-3 flex-col">
+                <h1 class="capitalize text-2xl font-semibold mb-3">Samples Negative</h1>
+                <table class="rounded-md border">
+                    <thead class="rounded-t">
+                        <tr class="rounded-t-lg">
+                            <th class="border border-1-[#f9f9f9] text-center">No</th>
+                            <th class="border border-1-[#f9f9f9]">Review</th>
+                            <th class="border border-1-[#f9f9f9]">Label</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for index, sample in samples_negative.iterrows() %}
+                        <tr>
+                            <td class="text-center border border-1-[#f9f9f9]">{{ index+1 }}</td>
+                            <td class="border border-1-[#f9f9f9]">{{ sample['review'] }}</td>
+                            <td class="border border-1-[#f9f9f9]">{{ sample['label'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
-    <div
-        class="flex flex-col rounded-2xl border border-1-[#f9f9f9] p-10 bg-[#09090a] text-[#f9f9f9] w-full items-center justify-center"
-    >
-        <h1 class="capitalize text-4xl font-semibold my-3">Samples</h1>
-        <table class="rounded-md border">
-            <thead class="rounded-t">
-                <tr class="rounded-t-lg">
-                    <th class="border border-1-[#f9f9f9] text-center">No</th>
-                    <th class="border border-1-[#f9f9f9]">Review</th>
-                    <th class="border border-1-[#f9f9f9]">Aspek</th>
-                    <th class="border border-1-[#f9f9f9]">Label</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for aspek, sample in samples_per_aspek.iterrows() %}
-                <tr>
-                    <td class="text-center border border-1-[#f9f9f9]">{{ aspek+1 }}</td>
-                    <td class="border border-1-[#f9f9f9]">{{ sample['review'] }}</td>
-                    <td class="border border-1-[#f9f9f9]">{{ sample['aspek'] }}</td>
-                    <td class="border border-1-[#f9f9f9]">{{ sample['label'] }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     </div>
 </section>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var ctxCluster = document.getElementById('pieChartCluster').getContext('2d');
-    var dataCluster = {
-        labels: {{ labels_cluster | tojson }},
-        datasets: [{
-            data: {{ counts_cluster | tojson }},
-            backgroundColor: [
-                'rgba(59, 130, 246, 0.8)',
-                'rgba(59, 130, 246, 0.2)',
-                'rgba(250, 250, 250, 0.2)',
-            ]
-        }]
-    };
-    var myPieChartCluster = new Chart(ctxCluster, {
-        type: 'pie',
-        data: dataCluster,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                },
-                title: {
-                    display: true,
-                    text: 'Clusters'
-                }
-            }
-        },
-    });
+    var chartCtx = document.getElementById("chart").getContext("2d");
 
-    var ctxKebersihan = document.getElementById('pieChartKebersihan').getContext('2d');
-    var dataKebersihan = {
-        labels: {{ labels_kebersihan | tojson }},
-        datasets: [{
-            data: {{ counts_kebersihan | tojson }},
-            backgroundColor: [
-                'rgba(59, 130, 246, 0.8)',
-                'rgba(59, 130, 246, 0.2)',
-                'rgba(250, 250, 250, 0.8)',
-            ]
-        }]
-    };
-    var myPieChartKebersihan = new Chart(ctxKebersihan, {
-        type: 'pie',
-        data: dataKebersihan,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                },
-                title: {
-                    display: true,
-                    text: 'Aspek Kebersihan'
-                }
-            }
-        },
-    });
+    const labels = JSON.parse(`{{ labels_result | tojson }}`);
+    const results = JSON.parse(`{{ counts_result | tojson }}`);
+    const bg = ["rgba(59, 130, 246, 0.8)", "rgba(59, 130, 246, 0.2)"];
+    console.log(labels);
+    console.log(results);
 
-    var ctxService = document.getElementById('pieChartService').getContext('2d');
-    var dataService = {
-        labels: {{ labels_service | tojson }},
-        datasets: [{
-            data: {{ counts_service | tojson }},
-            backgroundColor: [
-                'rgba(59, 130, 246, 0.8)',
-                'rgba(59, 130, 246, 0.2)',
-                'rgba(250, 250, 250, 0.8)',
-            ]
-        }]
+    var classificationData = {
+        labels: labels,
+        datasets: [
+            {
+                label: "Count",
+                data: results,
+                backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
+                borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
+                borderWidth: 1,
+            },
+        ],
     };
-    var myPieChartService = new Chart(ctxService, {
-        type: 'pie',
-        data: dataService,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                },
-                title: {
-                    display: true,
-                    text: 'Aspek Service'
-                }
-            }
-        },
-    });
 
-    var ctxLinen = document.getElementById('pieChartLinen').getContext('2d');
-    var dataLinen = {
-        labels: {{ labels_linen | tojson }},
-        datasets: [{
-            data: {{ counts_linen | tojson }},
-            backgroundColor: [
-                'rgba(59, 130, 246, 0.8)',
-                'rgba(59, 130, 246, 0.2)',
-                'rgba(250, 250, 250, 0.8)',
-            ]
-        }]
-    };
-    var myPieChartLinen = new Chart(ctxLinen, {
-        type: 'pie',
-        data: dataLinen,
+    console.log(classificationData);
+
+    var classificationChart = new Chart(chartCtx, {
+        type: "bar",
+        data: classificationData,
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'bottom',
+                    position: "top",
                 },
                 title: {
                     display: true,
-                    text: 'Aspek Linen'
-                }
-            }
+                    text: "User Review Analysis",
+                },
+            },
         },
     });
 </script>
+
 {% endblock %}
