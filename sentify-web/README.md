@@ -33,7 +33,7 @@ To run the project, follow the steps below:
 3. Navigate to the project's "web-sentify" directory:
 
     ```bash
-    cd web-sentify
+    cd sentify-web
     ```
 
 4. Enter the virtual environment:
