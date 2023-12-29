@@ -4,8 +4,6 @@ from .preprocessing import data_preprocessor, process_review
 import time
 import os
 
-print(f"\n\n CWD: {os.getcwd()}\n\n")
-
 # Constants
 SVM_MODEL_PATH = "ml_models/svm_model.pkl"
 TFIDF_MODEL_PATH = "ml_models/tfidf_model.pkl"
@@ -35,7 +33,7 @@ def analyze_review(data):
     start_time = time.time()
     prediction = svm_model.predict(tfidf_matrix)
     end_time = time.time()
-    print(f"\nClustering time: {end_time - start_time} seconds")
+    print(f"\nClassification time: {end_time - start_time} seconds")
 
     df["label"] = prediction
 

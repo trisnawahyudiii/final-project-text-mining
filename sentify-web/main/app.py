@@ -66,16 +66,21 @@ def load_user():
     else:
         g.user = None
 
+    # Check if the route requires authentication
+    if request.endpoint in ["multi"] and not g.user:
+        flash("You must be logged in to access this page", "danger")
+        return redirect(url_for("login"))
+
 
 # controllers
 @app.route("/")
 def dashboard():
-    return render_template("dashboard/multi.html")
-
-
-@app.route("/single")
-def single():
     return render_template("dashboard/single.html")
+
+
+@app.route("/multi")
+def multi():
+    return render_template("dashboard/multi.html")
 
 
 # AUTH
@@ -165,11 +170,6 @@ def predict():
             labels_result = result["label"].value_counts().index.tolist()
             counts_result = result["label"].value_counts().tolist()
 
-            print("\nlabels: ")
-            print(labels_result)
-            print("\ncounts: ")
-            print(counts_result)
-
             samples = (
                 result.groupby("label")
                 .apply(lambda x: x.sample(5))
@@ -182,9 +182,6 @@ def predict():
             # Reset ulang indeks agar dimulai dari 0
             samples_positive.reset_index(drop=True, inplace=True)
             samples_negative.reset_index(drop=True, inplace=True)
-
-            print("\nsample positife: \n", samples_positive)
-            print("\nsample negative: \n", samples_negative)
 
             return render_template(
                 "predict/result_csv.html",
