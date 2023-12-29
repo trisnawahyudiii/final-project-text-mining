@@ -1,0 +1,17 @@
+TY  - JOUR
+AU  - Yu, Bengong
+AU  - Fan, Zhaodi
+PY  - 2020
+DA  - 2020/08/01
+TI  - A comprehensive review of conditional random fields: variants, hybrids and applications
+JO  - Artificial Intelligence Review
+SP  - 4289
+EP  - 4333
+VL  - 53
+IS  - 6
+AB  - The conditional random fields (CRFs) model plays an important role in the machine learning field. Driven by the development of the artificial intelligence, the CRF models have enjoyed great advancement. To analyze the recent development of the CRFs, this paper presents a comprehensive review of different versions of the CRF models and their applications. On the basis of elaborating on the background and definition of the CRFs, it analyzes three basic problems faced by the CRF models and reviews their latest improvements. Based on that, it presents the applications of the CRFs in the natural language processing, computer vision, biomedicine, Internet intelligence and other relevant fields. At last, specific analysis and future directions of the CRFs are discussed.
+SN  - 1573-7462
+UR  - https://doi.org/10.1007/s10462-019-09793-6
+DO  - 10.1007/s10462-019-09793-6
+ID  - Yu2020
+ER  - 

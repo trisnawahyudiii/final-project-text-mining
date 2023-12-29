@@ -1,0 +1,20 @@
+TY  - JOUR
+AU  - Xia, Huosong
+AU  - Yang, Yitai
+AU  - Pan, Xiaoting
+AU  - Zhang, Zuopeng
+AU  - An, Wuyue
+PY  - 2020
+DA  - 2020/06/01
+TI  - Sentiment analysis for online reviews using conditional random fields and support vector machines
+JO  - Electronic Commerce Research
+SP  - 343
+EP  - 360
+VL  - 20
+IS  - 2
+AB  - Sentiment analysis of online reviews is an important way of mining useful information from the Internet. Despite several advantages, the accuracy of sentiment analysis based on a domain dictionary relies on the comprehensiveness and accuracy of the dictionary. Instead of creating a domain dictionary, we propose an approach for online review sentiment classification, which uses a conditional random field algorithm to extract the emotional characteristics from fragments of the review. The characteristic (feature) words are then weighted asymmetrically before a support vector machine classifier is used to obtain the sentiment orientation of the review. In our experiments, the average accuracy reached 90%, showing that using sentiment feature fragments instead of whole reviews and weighting the characteristic words asymmetrically can improve the sentiment classification accuracy.
+SN  - 1572-9362
+UR  - https://doi.org/10.1007/s10660-019-09354-7
+DO  - 10.1007/s10660-019-09354-7
+ID  - Xia2020
+ER  - 

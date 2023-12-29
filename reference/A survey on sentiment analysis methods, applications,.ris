@@ -1,0 +1,18 @@
+TY  - JOUR
+AU  - Wankhade, Mayur
+AU  - Rao, Annavarapu Chandra Sekhara
+AU  - Kulkarni, Chaitanya
+PY  - 2022
+DA  - 2022/10/01
+TI  - A survey on sentiment analysis methods, applications, and challenges
+JO  - Artificial Intelligence Review
+SP  - 5731
+EP  - 5780
+VL  - 55
+IS  - 7
+AB  - The rapid growth of Internet-based applications, such as social media platforms and blogs, has resulted in comments and reviews concerning day-to-day activities. Sentiment analysis is the process of gathering and analyzing people’s opinions, thoughts, and impressions regarding various topics, products, subjects, and services. People’s opinions can be beneficial to corporations, governments, and individuals for collecting information and making decisions based on opinion. However, the sentiment analysis and evaluation procedure face numerous challenges. These challenges create impediments to accurately interpreting sentiments and determining the appropriate sentiment polarity. Sentiment analysis identifies and extracts subjective information from the text using natural language processing and text mining. This article discusses a complete overview of the method for completing this task as well as the applications of sentiment analysis. Then, it evaluates, compares, and investigates the approaches used to gain a comprehensive understanding of their advantages and disadvantages. Finally, the challenges of sentiment analysis are examined in order to define future directions.
+SN  - 1573-7462
+UR  - https://doi.org/10.1007/s10462-022-10144-1
+DO  - 10.1007/s10462-022-10144-1
+ID  - Wankhade2022
+ER  - 
