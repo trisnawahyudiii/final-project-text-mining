@@ -1,0 +1,43 @@
+{% extends "layouts/index.html" %} {% block content %}
+<section class="w-full flex flex-col items-center justify-center text-center h-[calc(100vh-132px)]">
+    <div
+        class="flex flex-col items-center justify-center bg-[#09090a] p-5 text-[#f9f9f9] rounded-xl min-w-[400px]"
+    >
+        <h1 class="text-xl capitalize font-semibold">Login</h1>
+
+        <form action="/auth/login" method="post" class="w-full flex flex-col gap-3 my-5">
+            <label for="email" class="flex flex-col items-start">
+                Email
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="example@mail.com"
+                    class="border border-slate-400 px-4 py-2 bg-black text-[#f9f9f9] focus:ring-1 focus:border-none focus:ring-blue-200 rounded-md w-full text-[#09090a]"
+                />
+            </label>
+            <label for="password" class="flex flex-col items-start">
+                Password
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="password"
+                    class="border border-slate-400 px-4 py-2 bg-black text-[#f9f9f9] focus:ring-1 focus:border-none focus:ring-blue-200 rounded-md w-full text-[#09090a]"
+                />
+            </label>
+            <button
+                class="hover:bg-[#f9f9f9] bg-transparent ring-[#f9f9f9] ring ring-1 text-[#f9f9f9] hover:text-slate-600 px-4 py-2 rounded focus:ring focus:ring-[#f9f9f9] font-semibold"
+            >
+                Login
+            </button>
+        </form>
+        <p class="text-[#f9f9f9]/70">
+            Don&apos;t have an account?
+            <a href="/auth/register" class="hover:underline text-[#f9f9f9]/90 font-semibold"
+                >Register</a
+            >
+        </p>
+    </div>
+</section>
+{% endblock %}

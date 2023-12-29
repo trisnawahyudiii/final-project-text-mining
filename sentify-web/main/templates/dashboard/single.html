@@ -1,0 +1,29 @@
+{% extends "layouts/index.html" %} {% block content %}
+<section class="w-full flex flex-col items-center justify-center text-center h-[calc(100vh-132px)]">
+    <div class="flex gap-3 mb-3">
+        <a
+            href="/"
+            class="font-semibold bg-[#f9f9f9] hover:bg-[#f9f9f9]/90 text-[#09090a] hover:text-[#09090a] border border-[#f9f9f9] px-4 py-2 rounded focus:ring focus:ring-[#f9f9f9]"
+            >Uplad CSV</a
+        >
+        <a
+            href="/single"
+            class="font-semibold bg-[#f9f9f9] hover:bg-[#f9f9f9]/90 text-[#09090a] hover:text-[#09090a] border border-[#f9f9f9] px-4 py-2 rounded focus:ring focus:ring-[#f9f9f9]"
+            >Single Text</a
+        >
+    </div>
+
+    <form action="/predict-single" method="post" class="relative w-1/2 text-[#f9f9f9]">
+        <input
+            type="text"
+            id="review"
+            name="review"
+            placeholder="Lorem ipsum dolor sit amet."
+            class="border border-slate-400 px-4 py-2 bg-black focus:ring-1 focus:border-none focus:ring-blue-200 rounded-md w-full"
+        />
+        <button class="absolute right-0 top-0 -translate-x-[100%] translate-y-[35%]">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+    </form>
+</section>
+{% endblock %}

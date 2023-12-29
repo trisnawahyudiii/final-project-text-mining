@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sentify</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+            integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+    </head>
+    <body class="min-h-screen bg-black">
+        <!-- navbar -->
+        <nav
+            class="flex items-center justify-center bg-[#09090a]/90 backdrop-blur supports-[backdrop-filter]:bg-background/60 text-[#f9f9f9] py-5 sticky top-0 border-b border-b-[#27272a]"
+        >
+            <ul class="container px-3 mx-auto flex items-center justify-between gap-3">
+                <li>
+                    <a href="/" class="hover:underline uppercase font-bold text-xl">Sentify</a>
+                </li>
+                <div class="flex gap-3 items-center justify-center font-semibold">
+                    <li><a href="/" class="hover:underline px-4 py-2">Dashboard</a></li>
+                    <div class="flex gap-3">
+                        {% if g.user %}
+                        <li>Welcome, {{ g.user.email }}!</li>
+                        <li>
+                            <a
+                                href="{{ url_for('logout') }}"
+                                class="bg-[#f9f9f9] hover:bg-[#f9f9f9]/90 text-[#09090a] hover:text-[#09090a] border border-[#f9f9f9] px-4 py-2 rounded focus:ring focus:ring-[#f9f9f9]"
+                                >Logout</a
+                            >
+                        </li>
+                        {% else %}
+                        <li>
+                            <a
+                                href="/auth/login"
+                                class="bg-[#f9f9f9] hover:bg-[#f9f9f9]/90 text-[#09090a] hover:text-[#09090a] border border-[#f9f9f9] px-4 py-2 rounded focus:ring focus:ring-[#f9f9f9]"
+                            >
+                                Login
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="/auth/register"
+                                class="bg-[#f9f9f9] hover:bg-[#f9f9f9]/90 text-[#09090a] hover:text-[#09090a] border border-[#f9f9f9] px-4 py-2 rounded focus:ring focus:ring-[#f9f9f9]"
+                            >
+                                Register
+                            </a>
+                        </li>
+                        {% endif %}
+                    </div>
+                </div>
+            </ul>
+        </nav>
+
+        <!-- content -->
+        <main class="container px-3 py-3 mx-auto flex flex-col">
+            {% block content %} {% endblock %}
+        </main>
+
+        <!-- footer -->
+        <footer class="container px-3 flex gap-3 py-5 mx-auto w-full text-[#f9f9f9]">
+            <ul class="flex gap-3">
+                <li>Contact</li>
+                <li>Term</li>
+                <li>Privacy</li>
+            </ul>
+        </footer>
+    </body>
+</html>
