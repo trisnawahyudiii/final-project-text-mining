@@ -62,8 +62,7 @@
     const labels = JSON.parse(`{{ labels_result | tojson }}`);
     const results = JSON.parse(`{{ counts_result | tojson }}`);
     const bg = ["rgba(59, 130, 246, 0.8)", "rgba(59, 130, 246, 0.2)"];
-    console.log(labels);
-    console.log(results);
+
 
     var classificationData = {
         labels: labels,
@@ -78,7 +77,6 @@
         ],
     };
 
-    console.log(classificationData);
 
     var classificationChart = new Chart(chartCtx, {
         type: "bar",

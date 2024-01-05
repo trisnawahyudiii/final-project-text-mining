@@ -1,5 +1,7 @@
-{% extends "layouts/index.html" %} {% block content %}
-<section class="w-full flex flex-col items-center justify-center text-center h-[calc(100vh-132px)]">
+{% extends "layouts/index.html" %} {% block content %}{% include 'components/toast.html' %}
+<section
+    class="w-full flex flex-col items-center justify-center text-center h-[calc(100vh-132px-1.6rem)]"
+>
     <div class="flex gap-3 mb-3">
         <a
             href="/"
@@ -19,18 +21,96 @@
         enctype="multipart/form-data"
         class="relative w-1/2 text-[#f9f9f9]"
     >
-        <input
-            type="file"
-            id="file"
-            name="file"
-            accept=".csv"
-            required
-            placeholder="upload your csv file here"
-            class="border border-slate-400 px-4 py-2 bg-black focus:ring-1 focus:border-none focus:ring-blue-200 rounded-md w-full"
-        />
+        <div
+            id="drop-area"
+            tabindex="1"
+            class="border-2 border-dashed border-gray-400 px-4 py-8 bg-black rounded-md text-center cursor-pointer"
+        >
+            <div id="fileInputContainer">
+                <p class="text-gray-300">Drag & drop your CSV file here</p>
+                <p class="my-1 text-sm text-gray-400">or</p>
+                <label for="file" class="mt-2 cursor-pointer">
+                    <input type="file" id="file" name="file" accept=".csv" class="hidden" />
+                    <span
+                        id="browseFileButton"
+                        class="inline-block text-white py-2 px-4 rounded-md cursor-pointer"
+                    >
+                        Browse
+                    </span>
+                </label>
+            </div>
+            <span id="fileInfoContainer" class="hidden"></span>
+        </div>
         <button class="absolute right-0 top-0 -translate-x-[100%] translate-y-[50%]">
             <i class="fa-regular fa-paper-plane"></i>
         </button>
     </form>
 </section>
+
+<script>
+    const fileInputContainer = document.getElementById("fileInputContainer");
+    const fileInfoContainer = document.getElementById("fileInfoContainer");
+    const fileInput = document.getElementById("file");
+    const dropArea = document.getElementById("drop-area");
+    const browseFileButton = document.getElementById("browseFileButton");
+
+    dropArea.addEventListener("click", () => {
+        browseFileButton.click();
+    });
+
+    browseFileButton.addEventListener("click", (e) => {
+        e.stopImmediatePropagation();
+    });
+
+    dropArea.addEventListener("dragover", function (e) {
+        e.preventDefault();
+        dropArea.classList.add("border-dashed", "border-blue-500");
+    });
+
+    dropArea.addEventListener("dragleave", function () {
+        dropArea.classList.remove("border-dashed", "border-blue-500");
+    });
+
+    dropArea.addEventListener("drop", function (e) {
+        e.preventDefault();
+        dropArea.classList.remove("border-dashed", "border-blue-500");
+
+        const droppedFiles = e.dataTransfer.files;
+        if (droppedFiles.length > 0) {
+            fileInput.files = droppedFiles;
+            // You can handle the dropped files here, if needed
+            showFileInfo();
+        }
+    });
+
+    fileInput.addEventListener("change", () => showFileInfo());
+
+    function showFileInfo() {
+        fileInputContainer.classList.add("hidden");
+        fileInfoContainer.classList.remove("hidden");
+
+        const fileName = fileInput.files[0].name;
+        fileInfoContainer.innerHTML = `<i class="fas fa-file-csv "></i> ${fileName}`;
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to show a toast
+        function showToast(message, type) {
+            const toast = document.querySelector("[x-data]");
+            toast.__x.$data.message = message;
+            toast.__x.$data.type = type;
+            toast.__x.$data.show = true;
+
+            // Hide the toast after 3 seconds (adjust as needed)
+            setTimeout(() => {
+                toast.__x.$data.show = false;
+            }, 3000);
+        }
+
+        const messages = `{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}{{message}}{% endfor %}{% endif %}{% endwith %}`;
+        const category = `{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}{{category}}{% endfor %}{% endif %}{% endwith %}`;
+        showToast(messages, category);
+    });
+</script>
 {% endblock %}

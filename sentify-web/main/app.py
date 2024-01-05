@@ -137,6 +137,7 @@ def login():
 def logout():
     # Clear the session
     session.clear()
+    flash("Logout success", "success")
     return redirect(url_for("login"))
 
 
@@ -146,15 +147,19 @@ def predict():
     if request.method == "POST":
         # Check if the post request has the file part
         if "file" not in request.files:
-            flash("No file part")
-            return redirect(request.url)
+            flash("No file part", "danger")
+            return redirect(url_for("multi"))
 
         file = request.files["file"]
 
         # If the user does not select a file, the browser submits an empty file without a filename
         if file.filename == "":
-            flash("No selected file")
-            return redirect(request.url)
+            flash("No selected file", "danger")
+            return redirect(url_for("multi"))
+
+        if not allowed_file(file.filename):
+            flash("File type does not supported", "danger")
+            return redirect(url_for("multi"))
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)

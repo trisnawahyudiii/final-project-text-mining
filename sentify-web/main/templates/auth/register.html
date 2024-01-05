@@ -1,4 +1,4 @@
-{% extends "layouts/index.html" %} {% block content %}
+{% extends "layouts/index.html" %} {% block content %} {% include 'components/toast.html' %}
 <section class="w-full flex flex-col items-center justify-center text-center h-[calc(100vh-132px)]">
     <div
         class="flex flex-col items-center justify-center bg-[#09090a] p-5 text-[#f9f9f9] rounded-xl min-w-[400px]"
@@ -48,4 +48,24 @@
         </p>
     </div>
 </section>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to show a toast
+        function showToast(message, type) {
+            const toast = document.querySelector("[x-data]");
+            toast.__x.$data.message = message;
+            toast.__x.$data.type = type;
+            toast.__x.$data.show = true;
+
+            // Hide the toast after 3 seconds (adjust as needed)
+            setTimeout(() => {
+                toast.__x.$data.show = false;
+            }, 3000);
+        }
+
+        const messages = `{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}{{message}}{% endfor %}{% endif %}{% endwith %}`;
+        const category = `{% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}{{category}}{% endfor %}{% endif %}{% endwith %}`;
+        showToast(messages, category);
+    });
+</script>
 {% endblock %}
